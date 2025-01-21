@@ -43,9 +43,13 @@
 */
 uint64_t Tools::buildLong(uint8_t bytes[LONGSIZE])
 {
+  /* result to be returned*/
   uint64_t result=0;
+  /* goes through each byte 0-7*/
   for(int i =0; i < LONGSIZE; i++)
   {
+    /*result is ored with 64 bit converted 'bytes' shifted to specific byte i
+    continues to shift bytes and ored to keep copying*/
     result |= ((uint64_t)bytes[i] << (8*i));
   }
   return result;
@@ -72,7 +76,15 @@ uint64_t Tools::buildLong(uint8_t bytes[LONGSIZE])
 */
 uint64_t Tools::getByte(uint64_t source, int32_t byteNum)
 {
-  return 0;
+  /*check first to see if byteNum is within range 0-7 return 0 if out of range*/
+  if(byteNum<0 || byteNum>7)
+  {
+    return 0;
+  }
+  /* passed range test, first shift source 64 unsigned bit to byteNum target by multplying
+  8 * byteNume we can get to specific 8 bits or byte
+  afterwards we can use bitwise AND to drop least significant bits */
+  return  (source >>  (byteNum * 8)) & 0xFF;
 }
 
 /**
