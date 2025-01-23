@@ -299,7 +299,21 @@ uint64_t Tools::copyBits(uint64_t source, uint64_t dest,
  */
 uint64_t Tools::setByte(uint64_t source, int32_t byteNum)
 {
-  return 0;
+
+  //first lets create a mask that shifts to position target
+  uint64_t mask = 0xFFULL << (byteNum * 8);
+
+  //Now we can or our soure with mask to get desired outcome/answer
+  uint64_t result = source | mask;
+
+  //this will test for range, if conditions result in false we know we are out of range
+  //we will multiple the result by this and if 0, out of range
+  uint64_t validRange = (byteNum >= 0 && byteNum < 8) * result;
+
+    //Or will pick source if out range or validRange if in range.
+    return validRange | source;
+
+  
 }
 
 
@@ -321,7 +335,9 @@ uint64_t Tools::setByte(uint64_t source, int32_t byteNum)
  */
 uint64_t Tools::sign(uint64_t source)
 {
-  return 0;
+  uint64_t result = getBits(source, 0x3F,0x3F);
+
+  return result & 1;
 }
 
 /**
