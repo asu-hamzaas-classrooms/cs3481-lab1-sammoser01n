@@ -163,8 +163,31 @@ uint64_t Tools::getBits(uint64_t source, int32_t low, int32_t high)
  */
 uint64_t Tools::setBits(uint64_t source, int32_t low, int32_t high)
 {
-  return 0;
+
+/*First we check for range validity, then use same operations from getbits, we can creak a mask that
+holds 1's then we or it */
+if(low<0 || high > 63)
+  {
+    return source;
+  }
+
+  //mask to hold 1's
+  uint64_t mask =0xFFFFFFFFFFFFFFFF;
+
+  //shift our high bits
+  mask <<= (63 - high); 
+
+  // shift out low bits
+  mask >>= (63 - high + low); 
+
+  //align mask with low bit position
+  mask <<= low;
+ 
+  // or the mask with source to complete setting the bit range to 1's
+  return source | mask;
 }
+
+
 
 /**
  * clears the bits of source in the range low to high to 0 (clears them) and
@@ -188,7 +211,39 @@ uint64_t Tools::setBits(uint64_t source, int32_t low, int32_t high)
  */
 uint64_t Tools::clearBits(uint64_t source, int32_t low, int32_t high)
 {
-  return 0;
+  //first check range like previous methods
+  if(low<0 || high > 63 || low>high)
+  {
+    return source;
+  }
+  //passed test, we can use setBit operations mostly to creak mask that 
+  //will cover disired range except a few differences
+
+
+ //mask to hold 1's
+  uint64_t mask =0xFFFFFFFFFFFFFFFF;
+
+  //this will be our final result, a copy of our source to use later
+  uint64_t mask2 = source & mask;
+
+
+  //shift our high bits off mask
+  mask <<= (63 - high); 
+
+  // shift out low bits off mask
+  mask >>= (63 - high + low); 
+
+  //align mask with low bit position, now we have desired range set
+  mask <<= low;
+
+  //this will invert our mask, setting our range to 0's
+  mask = ~mask;
+
+  //now we can and our source copy with the mask to clear desired range
+  mask2 = mask2 & mask;
+
+
+  return(mask2);
 }
 
 
