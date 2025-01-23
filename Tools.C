@@ -114,7 +114,28 @@ uint64_t Tools::getByte(uint64_t source, int32_t byteNum)
  */
 uint64_t Tools::getBits(uint64_t source, int32_t low, int32_t high)
 {
-  return 0;
+  /*first check to see if low or high bit numbers are out of range, or contradict..low>high, if they are we return 0*/
+  if(low <0 || high >63)
+  {
+    return 0;
+  }
+  /*Passed range test now we can go ahead with method goal
+  First construct a mask to isloate low through high  */
+
+  //make for seperating bits
+  uint64_t mask = 0xFFFFFFFFFFFFFFFF; 
+
+  // shift out irrelavnt bits above
+  mask <<= (63 - high); 
+
+  // shift out irrelevant bits below
+  mask >>= (63 - high + low); 
+
+  //align mask with low bit position
+  mask <<= low; 
+
+  //convert mask to result by last shift to the left
+  return (source & mask) >> low;
 }
 
 
