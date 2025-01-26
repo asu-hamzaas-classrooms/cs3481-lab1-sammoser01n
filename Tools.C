@@ -274,8 +274,31 @@ uint64_t Tools::clearBits(uint64_t source, int32_t low, int32_t high)
 uint64_t Tools::copyBits(uint64_t source, uint64_t dest, 
                          int32_t srclow, int32_t dstlow, int32_t length)
 {
-   return 0; 
-}
+ // Calculate the high bit for source and destination
+    int32_t srchigh = srclow + length - 1;
+    int32_t dsthigh = dstlow + length - 1;
+
+    // Check for ranges using an if statement
+    if (srclow < 0 || dstlow < 0 || srchigh >= 64 || dsthigh >= 64 || length < 0 || length > 64) {
+        return dest;
+    }
+
+    // Create a mask with length bits set to 1
+    uint64_t mask = (1ULL << length) - 1;
+
+    // Extract the bits from the source
+    uint64_t srcBits = (source >> srclow) & mask;
+
+    // Clear the corresponding bits in the destination
+    dest &= ~(mask << dstlow);
+
+    // Set the bits in the destination
+    dest |= (srcBits << dstlow);
+
+    return dest;
+     }
+
+
 
 
 /**
