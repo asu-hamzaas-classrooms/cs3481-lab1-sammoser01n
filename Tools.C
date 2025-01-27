@@ -382,16 +382,28 @@ uint64_t Tools::sign(uint64_t source)
  * 2) you can use other functions you have written, for example, sign
  * 3) no more than 10 lines of code
  */
+
 bool Tools::addOverflow(uint64_t op1, uint64_t op2)
 {
-  //Hint: If an overflow occurs then it overflows by just one bit.
-  //      In other words, 65 bits would be needed to store the arithmetic 
-  //      result instead of 64 and the sign bit in the stored result (bit 63) is incorrect. 
-  //      Thus, the way to check for an overflow is to compare the signs of the
-  //      operand and the result.  For example, if you add two positive numbers, 
-  //      the result should be positive, otherwise an overflow occurred.
-  return false;
+  //First add the two ops
+  uint64_t result = op1 +op2;
+  //get the first sign
+  bool op1sign =sign(op1);
+  //get the 2nd op
+  bool op2sign = sign(op2);
+
+  //get result sign
+  bool result_sign = sign(result);
+
+  //create bool to return iff the op signs equal each other and op1 sign does
+  //not equal result sign we have overflow
+  bool final =(op1sign == op2sign) && (op1sign != result_sign);
+  return final;
 }
+
+
+
+
 
 /**
  * assumes that op1 and op2 contain 64 bit two's complement values
@@ -415,9 +427,17 @@ bool Tools::addOverflow(uint64_t op1, uint64_t op2)
  */
 bool Tools::subOverflow(uint64_t op1, uint64_t op2)
 {
-  //See hint for addOverflow
-  //Note: you can not simply use addOverflow in this function.  If you negate
-  //op1 in order to an add, you may get an overflow. 
-  //NOTE: the subtraction is op2 - op1 (not op1 - op2).
-  return false;
+   uint64_t result = op2-op1;
+  //get the first sign
+  bool op1sign =sign(op1);
+  //get the 2nd op
+  bool op2sign = sign(op2);
+
+  //get result sign
+  bool result_sign = sign(result);
+
+  //create bool to return iff the op signs equal each other and op1 sign does
+  //not equal result sign we have overflow
+  bool final =(op1sign == op2sign) && (op1sign != result_sign);
+  return final;
 }
