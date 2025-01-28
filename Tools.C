@@ -427,17 +427,12 @@ bool Tools::addOverflow(uint64_t op1, uint64_t op2)
  */
 bool Tools::subOverflow(uint64_t op1, uint64_t op2)
 {
-   uint64_t result = op2-op1;
-  //get the first sign
-  bool op1sign =sign(op1);
-  //get the 2nd op
-  bool op2sign = sign(op2);
+  //Not sure why but had to intialize/declare ops again for it to work
+    int64_t op1Signed = op1;
+    int64_t op2Signed = op2;
+  //get result op2-op1
+    int64_t result = op2 - op1;
 
-  //get result sign
-  bool result_sign = sign(result);
-
-  //create bool to return iff the op signs equal each other and op1 sign does
-  //not equal result sign we have overflow
-  bool final =(op1sign == op2sign) && (op1sign != result_sign);
-  return final;
+  //see if op signs are the same and if result has same sign as op2
+    return (op1Signed < 0) != (op2Signed < 0) && (result < 0) != (op2Signed < 0);
 }
